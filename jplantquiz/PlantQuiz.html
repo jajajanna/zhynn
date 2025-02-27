@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f8ea;
+        }
+        .quiz-container {
+            margin: 50px auto;
+            padding: 20px;
+            max-width: 400px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .correct {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .wrong {
+            background-color: #f44336;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.8;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="quiz-container" class="quiz-container">
+    </div>
+    <script>
+        const quizzes = [
+            { question: "Which of these plants is best for air purification?", options: ["Cactus", "Snake Plant", "Aloe Vera", "Sunflower"], answer: 1 },
+            { question: "Which plant is known as the 'money plant'?", options: ["Tulsi", "Jade Plant", "Pothos", "Cactus"], answer: 2 },
+            { question: "Which plant requires the least water?", options: ["Fern", "Orchid", "Cactus", "Bamboo"], answer: 2 },
+            { question: "Which plant is commonly used in herbal tea?", options: ["Rose", "Lavender", "Chamomile", "Sunflower"], answer: 2 },
+            { question: "Which plant is known for its healing properties?", options: ["Aloe Vera", "Jasmine", "Mango", "Banana"], answer: 0 },
+            { question: "Which plant is known to close its leaves when touched?", options: ["Mimosa", "Tulip", "Lavender", "Rose"], answer: 0 },
+            { question: "Which tree produces acorns?", options: ["Maple", "Oak", "Pine", "Cherry"], answer: 1 },
+            { question: "Which plant is commonly used in perfumes?", options: ["Rose", "Mint", "Basil", "Sunflower"], answer: 0 },
+            { question: "Which plant is best for keeping mosquitoes away?", options: ["Lemongrass", "Rose", "Cactus", "Tulip"], answer: 0 },
+            { question: "Which of these is a carnivorous plant?", options: ["Venus Flytrap", "Mango", "Fern", "Oak"], answer: 0 }
+        ];
+
+        let currentQuiz = 0;
+        let score = 0;
+
+        function loadQuiz() {
+            const container = document.getElementById("quiz-container");
+            container.innerHTML = "";
+            if (currentQuiz < quizzes.length) {
+                const quiz = quizzes[currentQuiz];
+                const questionElem = document.createElement("h2");
+                questionElem.textContent = quiz.question;
+                container.appendChild(questionElem);
+                quiz.options.forEach((option, index) => {
+                    const button = document.createElement("button");
+                    button.textContent = option;
+                    button.className = "btn";
+                    button.onclick = () => checkAnswer(index, button);
+                    container.appendChild(button);
+                });
+                const resultElem = document.createElement("p");
+                resultElem.id = "result";
+                container.appendChild(resultElem);
+            } else {
+                showFinalScore();
+            }
+        }
+
+        function checkAnswer(selectedIndex, button) {
+            const quiz = quizzes[currentQuiz];
+            if (selectedIndex === quiz.answer) {
+                button.classList.add("correct");
+                score++;
+                setTimeout(() => {
+                    currentQuiz++;
+                    loadQuiz();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 1000);
+            } else {
+                button.classList.add("wrong");
+            }
+        }
+
+        function showFinalScore() {
+            const container = document.getElementById("quiz-container");
+            container.innerHTML = `<h2>Your Score: ${score}/${quizzes.length}</h2>`;
+            const doneButton = document.createElement("button");
+            doneButton.textContent = "Done";
+            doneButton.className = "btn correct";
+            doneButton.onclick = () => alert("Thank you for playing!");
+            container.appendChild(doneButton);
+        }
+
+        loadQuiz();
+    </script>
+</body>
+</html>
