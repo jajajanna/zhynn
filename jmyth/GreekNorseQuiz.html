@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greek & Norse Mythology Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        .quiz-container {
+            margin: 50px auto;
+            padding: 20px;
+            max-width: 500px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .correct {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .wrong {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h2>Greek & Norse Mythology Quiz</h2>
+        <p id="question" class="question"></p>
+        <button class="btn" id="option1"></button>
+        <button class="btn" id="option2"></button>
+        <button class="btn" id="option3"></button>
+        <p id="result"></p>
+    </div>
+    <script>
+        const quizData = [
+            { question: "Who is the king of the Greek gods?", options: ["Zeus", "Odin", "Thor"], answer: "Zeus" },
+            { question: "Which Norse god wields Mjolnir?", options: ["Thor", "Loki", "Hermes"], answer: "Thor" },
+            { question: "Who is the Greek goddess of wisdom?", options: ["Athena", "Freya", "Hera"], answer: "Athena" },
+            { question: "Which Norse god is known as the trickster?", options: ["Loki", "Hades", "Poseidon"], answer: "Loki" },
+            { question: "Who is the ruler of the Greek underworld?", options: ["Hades", "Hel", "Ares"], answer: "Hades" },
+            { question: "Who is the Allfather in Norse mythology?", options: ["Odin", "Zeus", "Apollo"], answer: "Odin" },
+            { question: "Which creature guards the gates of the Greek underworld?", options: ["Cerberus", "Fenrir", "Chimera"], answer: "Cerberus" },
+            { question: "Who is the Norse goddess of the underworld?", options: ["Hel", "Persephone", "Aphrodite"], answer: "Hel" },
+            { question: "What is the name of the Greek hero who completed 12 labors?", options: ["Heracles", "Perseus", "Achilles"], answer: "Heracles" },
+            { question: "Who is the Norse god of war and justice, who lost his hand to Fenrir?", options: ["Tyr", "Ares", "Heimdall"], answer: "Tyr" }
+        ];
+        
+        let currentQuestion = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            if (currentQuestion >= quizData.length) {
+                showFinalScore();
+                return;
+            }
+            let q = quizData[currentQuestion];
+            document.getElementById("question").innerText = q.question;
+            document.getElementById("option1").innerText = q.options[0];
+            document.getElementById("option2").innerText = q.options[1];
+            document.getElementById("option3").innerText = q.options[2];
+            
+            document.getElementById("option1").onclick = () => checkAnswer(q.options[0], q.answer, "option1");
+            document.getElementById("option2").onclick = () => checkAnswer(q.options[1], q.answer, "option2");
+            document.getElementById("option3").onclick = () => checkAnswer(q.options[2], q.answer, "option3");
+        }
+        
+        function checkAnswer(selected, correct, buttonId) {
+            if (selected === correct) {
+                document.getElementById(buttonId).classList.add("correct");
+                document.getElementById("result").innerText = "Correct! 🎉";
+                score++;
+                setTimeout(() => {
+                    document.getElementById(buttonId).classList.remove("correct");
+                    currentQuestion++;
+                    loadQuestion();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 1000);
+            } else {
+                document.getElementById(buttonId).classList.add("wrong");
+                document.getElementById("result").innerText = "Wrong! Try again. ❌";
+                setTimeout(() => {
+                    document.getElementById(buttonId).classList.remove("wrong");
+                }, 1000);
+            }
+        }
+
+        function showFinalScore() {
+            document.body.innerHTML = `<div class='quiz-container'><h2>Your Score: ${score}/${quizData.length}</h2><button class='btn correct' onclick='alert("Thank you for playing!")'>Done</button></div>`;
+        }
+        
+        loadQuestion();
+    </script>
+</body>
+</html>
