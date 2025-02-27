@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Color</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f8ea;
+        }
+        .game-container {
+            margin: 50px auto;
+            padding: 20px;
+            max-width: 400px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .color-box {
+            width: 100px;
+            height: 100px;
+            margin: 20px auto;
+            border: 2px solid black;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .correct {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .wrong {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h2>Guess the Color</h2>
+        <div id="color-box" class="color-box"></div>
+        <p id="rgb-value"></p>
+        <button class="btn" id="option1"></button>
+        <button class="btn" id="option2"></button>
+        <button class="btn" id="option3"></button>
+        <p id="result"></p>
+    </div>
+    <script>
+        let score = 0;
+        let rounds = 0;
+        const maxRounds = 10;
+
+        function getRandomColor() {
+            return `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+        }
+
+        function setupGame() {
+            if (rounds >= maxRounds) {
+                setTimeout(showFinalScore, 500);
+                return;
+            }
+            
+            let correctColor = getRandomColor();
+            document.getElementById("color-box").style.backgroundColor = correctColor;
+            document.getElementById("rgb-value").innerText = `Which color is: ${correctColor}?`;
+            
+            let options = [correctColor, getRandomColor(), getRandomColor()].sort(() => Math.random() - 0.5);
+            document.getElementById("option1").textContent = options[0];
+            document.getElementById("option2").textContent = options[1];
+            document.getElementById("option3").textContent = options[2];
+            
+            document.getElementById("option1").onclick = () => checkAnswer(options[0], correctColor, "option1");
+            document.getElementById("option2").onclick = () => checkAnswer(options[1], correctColor, "option2");
+            document.getElementById("option3").onclick = () => checkAnswer(options[2], correctColor, "option3");
+        }
+
+        function checkAnswer(selected, correct, buttonId) {
+            if (selected === correct) {
+                document.getElementById(buttonId).classList.add("correct");
+                document.getElementById("result").innerText = "Correct! 🎉";
+                score++;
+                rounds++;
+                setTimeout(() => {
+                    document.getElementById(buttonId).classList.remove("correct");
+                    setupGame();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 1000);
+            } else {
+                document.getElementById(buttonId).classList.add("wrong");
+                document.getElementById("result").innerText = "Try again! ❌";
+                setTimeout(() => {
+                    document.getElementById(buttonId).classList.remove("wrong");
+                }, 1000);
+            }
+        }
+
+        function showFinalScore() {
+            document.body.innerHTML = `<div class='game-container'><h2>Your Score: ${score}/${maxRounds}</h2><button class='btn correct' onclick='alert("Thank you for playing!")'>Done</button></div>`;
+        }
+
+        setupGame();
+    </script>
+</body>
+</html>
